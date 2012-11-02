@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>com.github.chrisbanes.pulltorefresh</groupId>
+	<groupId>com.douban.widget</groupId>
 	<artifactId>extra-listfragment</artifactId>
 	<packaging>apklib</packaging>
 	<name>Android-PullToRefresh Extras: ListFragment</name>
 	
 	<parent>
-		<groupId>com.github.chrisbanes.pulltorefresh</groupId>
+		<groupId>com.douban.widget</groupId>
 		<artifactId>extras</artifactId>
 		<version>1.4.2</version>
 	</parent>
@@ -25,7 +25,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>library</artifactId>
+			<artifactId>pulltorefresh</artifactId>
 			<type>apklib</type>
 			<version>${project.version}</version>
 		</dependency>

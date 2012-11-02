@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.chrisbanes.pulltorefresh</groupId>
+	<groupId>com.douban.widget</groupId>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<version>1.4.2</version>
 	<name>Android-PullToRefresh Project</name>
 	<description>Implementation of the Pull-to-Refresh UI Pattern for Android.</description>
 	<url>https://github.com/chrisbanes/Android-PullToRefresh</url>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 	<licenses>
 		<license>
 			<name>Apache License Version 2.0</name>
@@ -38,6 +33,20 @@
 		<module>sample</module>
 		<module>extras</module>
 	</modules>
+
+    <distributionManagement>
+        <repository>
+            <id>Douban</id>
+            <name>Douban.com Repository</name>
+            <url>http://qaci.intra.douban.com/nexus/content/repositories/douban</url>
+        </repository>
+        <snapshotRepository>
+            <id>Douban-snapshot</id>
+            <name>Snapshot.douban.com Repository</name>
+            <url>http://qaci.intra.douban.com/nexus/content/repositories/douban-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 	<properties>
 		<!-- build settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
