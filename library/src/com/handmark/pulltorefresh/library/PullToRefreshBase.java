@@ -52,7 +52,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
     static final float FRICTION = 3.0f;
 
-    public static final int SMOOTH_SCROLL_DURATION_MS = 200;
+    public static final int SMOOTH_SCROLL_DURATION_MS = 250;
     public static final int SMOOTH_SCROLL_LONG_DURATION_MS = 325;
 
     static final Mode DEFAULT_MODE = Mode.PULL_DOWN_TO_REFRESH;
@@ -924,8 +924,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                 break;
         }
 
-        Log.d("PTR", "newScrollY=" + newScrollY + " mpullmax=" + mPullDownMax);
-
         setHeaderScroll(newScrollY);
 
         if (newScrollY != 0) {
@@ -957,12 +955,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         if (mMode.canPullDown()) {
             measureView(mHeaderLayout);
             mHeaderHeight = mHeaderLayout.getMeasuredHeight();
-            mPullDownMax = mHeaderHeight * 2;
+            mPullDownMax = (int)(mHeaderHeight * 1.5);
         }
         if (mMode.canPullUp()) {
             measureView(mFooterLayout);
             mFooterHeight = mFooterLayout.getMeasuredHeight();
-            mPullUpMax = mFooterHeight * 2;
+            mPullUpMax = (int)(mFooterHeight * 1.5);
         }
 
         // Hide Loading Views
@@ -1317,7 +1315,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
         @Override
         public void run() {
-
+            //TODO 修改动画效果..
             /**
              * Only set mStartTime if this is the first time we're starting,
              * else actually calculate the Y delta
