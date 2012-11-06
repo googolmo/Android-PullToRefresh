@@ -83,10 +83,10 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	public final void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount,
 			final int totalItemCount) {
 
-		if (DEBUG) {
-			Log.d(LOG_TAG, "First Visible: " + firstVisibleItem + ". Visible Count: " + visibleItemCount
-					+ ". Total Items: " + totalItemCount);
-		}
+//		if (DEBUG) {
+//			Log.d(LOG_TAG, "First Visible: " + firstVisibleItem + ". Visible Count: " + visibleItemCount
+//					+ ". Total Items: " + totalItemCount);
+//		}
 
 		// If we have a OnItemVisibleListener, do check...
 		if (null != mOnLastItemVisibleListener) {
@@ -278,7 +278,9 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	@Override
 	protected void handleStyledAttributes(TypedArray a) {
 		// Set Show Indicator to the XML value, or default value
-		mShowIndicator = a.getBoolean(R.styleable.PullToRefresh_ptrShowIndicator, !isPullToRefreshOverScrollEnabled());
+        // 默认不显示 indicator
+//		mShowIndicator = a.getBoolean(R.styleable.PullToRefresh_ptrShowIndicator, !isPullToRefreshOverScrollEnabled());
+        mShowIndicator = a.getBoolean(R.styleable.PullToRefresh_ptrShowIndicator, false);
 	}
 
 	protected boolean isReadyForPullDown() {

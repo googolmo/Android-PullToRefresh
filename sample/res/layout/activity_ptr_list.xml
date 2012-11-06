@@ -20,6 +20,9 @@
             android:headerDividersEnabled="false"
             android:smoothScrollbar="true"
             ptr:ptrAnimationStyle="flip"
+            ptr:ptrHeaderBackground="#FFFFFF"
+            ptr:ptrAdapterViewBackground="#FFFFFF"
+            ptr:ptrHeaderTextColor="#000000"
             />
 
 </LinearLayout>

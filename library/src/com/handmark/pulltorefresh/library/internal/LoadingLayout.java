@@ -70,17 +70,42 @@ public abstract class LoadingLayout extends LinearLayout {
 		switch (mode) {
 			case PULL_UP_TO_REFRESH:
 				// Load in labels
-				mPullLabel = context.getString(R.string.pull_to_refresh_from_bottom_pull_label);
-				mRefreshingLabel = context.getString(R.string.pull_to_refresh_from_bottom_refreshing_label);
-				mReleaseLabel = context.getString(R.string.pull_to_refresh_from_bottom_release_label);
+                if(attrs.hasValue(R.styleable.PullToRefresh_ptrPullUpLabel)) {
+                    mPullLabel = attrs.getString(R.styleable.PullToRefresh_ptrPullUpLabel);
+                } else {
+                    mPullLabel = context.getString(R.string.pull_to_refresh_from_bottom_pull_label);
+                }
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrPullUpRlsLabel)) {
+                    mReleaseLabel = attrs.getString(R.styleable.PullToRefresh_ptrPullUpRlsLabel);
+                } else {
+                    mReleaseLabel = context.getString(R.string.pull_to_refresh_from_bottom_release_label);
+                }
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrRefreshingLabel)) {
+                    mRefreshingLabel = attrs.getString(R.styleable.PullToRefresh_ptrRefreshingLabel);
+                } else {
+                    mRefreshingLabel = context.getString(R.string.pull_to_refresh_from_bottom_refreshing_label);
+                }
+
 				break;
 
 			case PULL_DOWN_TO_REFRESH:
 			default:
 				// Load in labels
-				mPullLabel = context.getString(R.string.pull_to_refresh_pull_label);
-				mRefreshingLabel = context.getString(R.string.pull_to_refresh_refreshing_label);
-				mReleaseLabel = context.getString(R.string.pull_to_refresh_release_label);
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrPullDownLabel)) {
+                    mPullLabel = attrs.getString(R.styleable.PullToRefresh_ptrPullDownLabel);
+                } else {
+                    mPullLabel = context.getString(R.string.pull_to_refresh_pull_label);
+                }
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrPullDownRlsLabel)) {
+                    mReleaseLabel = attrs.getString(R.styleable.PullToRefresh_ptrPullDownRlsLabel);
+                } else {
+                    mReleaseLabel = context.getString(R.string.pull_to_refresh_release_label);
+                }
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrRefreshingLabel)) {
+                    mRefreshingLabel = attrs.getString(R.styleable.PullToRefresh_ptrRefreshingLabel);
+                } else {
+                    mRefreshingLabel = context.getString(R.string.pull_to_refresh_refreshing_label);
+                }
 				break;
 		}
 
@@ -127,9 +152,9 @@ public abstract class LoadingLayout extends LinearLayout {
 		// If we don't have a user defined drawable, load the default
 		if (null == imageDrawable) {
 			if (mode == Mode.PULL_DOWN_TO_REFRESH) {
-				imageDrawable = context.getResources().getDrawable(getDefaultBottomDrawableResId());
-			} else {
 				imageDrawable = context.getResources().getDrawable(getDefaultTopDrawableResId());
+			} else {
+				imageDrawable = context.getResources().getDrawable(getDefaultBottomDrawableResId());
 			}
 		}
 

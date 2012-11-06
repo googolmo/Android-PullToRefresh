@@ -23,6 +23,11 @@
             <flag name="rotate" value="0x0" />
             <flag name="flip" value="0x1" />
         </attr>
+        <attr name="ptrPullDownLabel" format="reference|string"/>
+        <attr name="ptrPullUpLabel" format="reference|string"/>
+        <attr name="ptrPullUpRlsLabel" format="reference|string"/>
+        <attr name="ptrPullDownRlsLabel" format="reference|string"/>
+        <attr name="ptrRefreshingLabel" format="reference|string"/>
     </declare-styleable>
 
 </resources>

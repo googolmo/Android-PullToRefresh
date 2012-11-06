@@ -25,7 +25,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 final class OverscrollHelper {
 
 	static final String LOG_TAG = "OverscrollHelper";
-	static final float DEFAULT_OVERSCROLL_SCALE = 1f;
+	static final float DEFAULT_OVERSCROLL_SCALE = 0f;
 
 	/**
 	 * Helper method for Overscrolling that encapsulates all of the necessary
