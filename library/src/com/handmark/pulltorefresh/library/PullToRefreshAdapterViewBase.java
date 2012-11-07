@@ -41,6 +41,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	private int mSavedLastVisibleIndex = -1;
 	private OnScrollListener mOnScrollListener;
 	private OnLastItemVisibleListener mOnLastItemVisibleListener;
+    private OnAutoLoadMoreListener mOnAutoLoadMoreListener;
 	private View mEmptyView;
 
 	private IndicatorLayout mIndicatorIvTop;
@@ -83,13 +84,25 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	public final void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount,
 			final int totalItemCount) {
 
-//		if (DEBUG) {
-//			Log.d(LOG_TAG, "First Visible: " + firstVisibleItem + ". Visible Count: " + visibleItemCount
-//					+ ". Total Items: " + totalItemCount);
-//		}
+		if (DEBUG) {
+			Log.d(LOG_TAG, "First Visible: " + firstVisibleItem + ". Visible Count: " + visibleItemCount
+					+ ". Total Items: " + totalItemCount + ".Last Item: " + mSavedLastVisibleIndex
+                    + ". CanScrollTrigger: " + mCanScrollLoadMore);
+		}
+
+        // If we're showing the indicator, check positions...
+        if (getShowIndicatorInternal()) {
+            updateIndicatorViewsVisibility();
+        }
+
+        // Finally call OnScrollListener if we have one
+        if (null != mOnScrollListener) {
+            mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
 
 		// If we have a OnItemVisibleListener, do check...
-		if (null != mOnLastItemVisibleListener) {
+		if (mCanScrollLoadMore == true
+                &&(null != mOnLastItemVisibleListener || null != mOnAutoLoadMoreListener)) {
 
 			// Detect whether the last visible item has changed
 			final int lastVisibleItemIndex = firstVisibleItem + visibleItemCount;
@@ -99,23 +112,21 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 			 * the last item is visible. lastVisibleItemIndex is a zero-based
 			 * index, so we add one to it to check against totalItemCount.
 			 */
-			if (visibleItemCount > 0 && (lastVisibleItemIndex + 1) == totalItemCount) {
+			if (visibleItemCount > 0 && (lastVisibleItemIndex) == totalItemCount) {
 				if (lastVisibleItemIndex != mSavedLastVisibleIndex) {
 					mSavedLastVisibleIndex = lastVisibleItemIndex;
-					mOnLastItemVisibleListener.onLastItemVisible();
+                    mCanScrollLoadMore = false;
+                    if (null != mOnAutoLoadMoreListener) {
+                        mOnAutoLoadMoreListener.onLoadMore();
+                    }
+                    if (null != mOnLastItemVisibleListener) {
+                        mOnLastItemVisibleListener.onLastItemVisible();
+                    }
 				}
 			}
 		}
 
-		// If we're showing the indicator, check positions...
-		if (getShowIndicatorInternal()) {
-			updateIndicatorViewsVisibility();
-		}
 
-		// Finally call OnScrollListener if we have one
-		if (null != mOnScrollListener) {
-			mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-		}
 	}
 
 	public final void onScrollStateChanged(final AbsListView view, final int scrollState) {
@@ -196,6 +207,10 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	public final void setOnLastItemVisibleListener(OnLastItemVisibleListener listener) {
 		mOnLastItemVisibleListener = listener;
 	}
+
+    public final void setOnAutoLoadMoreListener(OnAutoLoadMoreListener listener) {
+        mOnAutoLoadMoreListener = listener;
+    }
 
 	public final void setOnScrollListener(OnScrollListener listener) {
 		mOnScrollListener = listener;

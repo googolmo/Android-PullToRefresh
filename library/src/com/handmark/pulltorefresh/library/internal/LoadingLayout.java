@@ -291,4 +291,15 @@ public abstract class LoadingLayout extends LinearLayout {
 
 	protected abstract void resetImpl();
 
+    protected abstract void resetNone();
+
+    public void resetNone(CharSequence title) {
+        mRefreshingLabel = title;
+        mHeaderText.setText(title);
+        mSubHeaderText.setVisibility(View.GONE);
+        mHeaderImage.setVisibility(View.GONE);
+        mHeaderProgress.setVisibility(View.GONE);
+        resetNone();
+    }
+
 }

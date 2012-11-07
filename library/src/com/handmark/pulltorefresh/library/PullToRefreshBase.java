@@ -87,6 +87,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     private boolean mDisableScrollingWhileRefreshing = false;
     private boolean mFilterTouchEvents = true;
     private boolean mOverScrollEnabled = false;
+    public boolean mCanScrollLoadMore = false;
+    public boolean mDisableScrollLoadMore = false;
 
     private Interpolator mScrollAnimationInterpolator;
     private AnimationStyle mLoadingAnimationStyle;
@@ -252,6 +254,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                 break;
             }
             case MotionEvent.ACTION_DOWN: {
+                mCanScrollLoadMore = true;
                 if (isReadyForPull()) {
                     mLastMotionY = mInitialMotionY = event.getY();
                     mLastMotionX = event.getX();
@@ -271,6 +274,19 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         }
     }
 
+    public final void onLoadMoreComplete() {
+        if (isRefreshing()) {
+            onResetFooter();
+        }
+    }
+
+    public final void onNoLoadMore(CharSequence title) {
+        if (isRefreshing()) {
+            mDisableScrollLoadMore = true;
+            onResetFooter(title);
+        }
+    }
+
     @Override
     public final boolean onTouchEvent(MotionEvent event) {
 
@@ -284,6 +300,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         }
 
         if (event.getAction() == MotionEvent.ACTION_DOWN && event.getEdgeFlags() != 0) {
+            mCanScrollLoadMore = true;
             return false;
         }
 
@@ -302,6 +319,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                 break;
 
             case MotionEvent.ACTION_DOWN: {
+                mCanScrollLoadMore = true;
                 if (isReadyForPull()) {
                     mLastMotionY = mInitialMotionY = event.getY();
                     return true;
@@ -360,10 +378,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
     @Override
     public void setLastUpdatedLabel(CharSequence label) {
-        if (null != mHeaderLayout) {
+        if (null != mHeaderLayout && mMode.canPullDown()) {
             mHeaderLayout.setSubHeaderText(label);
         }
-        if (null != mFooterLayout) {
+        if (null != mFooterLayout && mMode.canPullUp()) {
             mFooterLayout.setSubHeaderText(label);
         }
 
@@ -477,6 +495,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         }
     }
 
+    public final void setLoadMore(){
+        if (!isRefreshing() && !mDisableScrollLoadMore) {
+            onLoadMore(false);
+        }
+    }
+
     @Override
     public void setReleaseLabel(CharSequence releaseLabel) {
         setReleaseLabel(releaseLabel, Mode.BOTH);
@@ -542,6 +566,23 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         setRefreshingInternal(doScroll);
     }
 
+    void onLoadMore(final boolean doScroll) {
+
+        if (mMode.canLoadMore()) {
+            mState = State.REFRESHING;
+            mFooterLayout.refreshing();
+            if (doScroll) {
+                smoothScrollTo(-mFooterHeight);
+            }
+
+//            setRefreshingInternal(doScroll);
+            // Call OnPullEventListener
+            if (null != mOnPullEventListener) {
+                mOnPullEventListener.onPullEvent(this, mState, mCurrentMode);
+            }
+        }
+    }
+
     /**
      * Called when the UI has been to be updated to be in the
      * {@link State#RELEASE_TO_REFRESH} state.
@@ -575,6 +616,28 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
         // Call the deprecated method
         resetHeader();
+    }
+
+    void onResetFooter() {
+        mIsBeingDragged = false;
+        if (mMode.canLoadMore()) {
+            mState = State.RESET;
+            mFooterLayout.reset();
+            smoothScrollTo(0);
+            resetHeader();
+        }
+    }
+
+    void onResetFooter(CharSequence title) {
+        Log.d(LOG_TAG, "onResetFooter + " + title);
+        mIsBeingDragged = false;
+        if (mMode.canLoadMore()) {
+            Log.d(LOG_TAG, "onResetFooter + " + title);
+            mState = State.RESET;
+            //TODO
+            mFooterLayout.resetNone(title);
+            resetHeader();
+        }
     }
 
     /**
@@ -801,7 +864,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         if (this == mFooterLayout.getParent()) {
             removeView(mFooterLayout);
         }
-        if (mMode.canPullUp()) {
+        if (mMode.canPullUp() || mMode.canLoadMore()) {
             addViewInternal(mFooterLayout, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
         }
@@ -969,7 +1032,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
             mHeaderHeight = mHeaderLayout.getMeasuredHeight();
             mPullDownMax = (int) (mHeaderHeight * 1.5);
         }
-        if (mMode.canPullUp()) {
+        if (mMode.canPullUp() || mMode.canLoadMore()) {
             measureView(mFooterLayout);
             mFooterHeight = mFooterLayout.getMeasuredHeight();
             mPullUpMax = (int) (mFooterHeight * 1.5);
@@ -987,7 +1050,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                 break;
             case PULL_DOWN_TO_REFRESH:
             default:
-                setPadding(0, -mHeaderHeight, 0, 0);
+                setPadding(0, -mHeaderHeight, 0, -mFooterHeight);
                 break;
         }
     }
@@ -1151,6 +1214,14 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
             return this == PULL_UP_TO_REFRESH || this == BOTH;
         }
 
+        /**
+         * 是否可以加载更多
+         * @return
+         */
+        boolean canLoadMore() {
+            return this == PULL_DOWN_TO_REFRESH;
+        }
+
         int getIntValue() {
             return mIntValue;
         }
@@ -1171,6 +1242,13 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
          */
         public void onLastItemVisible();
 
+    }
+
+    /**
+     * 自动加载更多监听器
+     */
+    public static interface OnAutoLoadMoreListener {
+        public void onLoadMore();
     }
 
     // ===========================================================

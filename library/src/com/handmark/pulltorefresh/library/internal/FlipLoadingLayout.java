@@ -96,7 +96,15 @@ public class FlipLoadingLayout extends LoadingLayout {
 		mHeaderImage.setVisibility(View.VISIBLE);
 	}
 
-	@Override
+    @Override
+    protected void resetNone() {
+        mHeaderImage.clearAnimation();
+        mHeaderProgress.setVisibility(View.GONE);
+        mHeaderImage.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Override
 	protected int getDefaultTopDrawableResId() {
 		return R.drawable.default_ptr_flip_top;
 	}
@@ -105,5 +113,7 @@ public class FlipLoadingLayout extends LoadingLayout {
 	protected int getDefaultBottomDrawableResId() {
 		return R.drawable.default_ptr_flip_bottom;
 	}
+
+
 
 }

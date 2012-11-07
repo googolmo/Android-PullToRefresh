@@ -17,11 +17,13 @@ package com.handmark.pulltorefresh.samples;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Random;
 
 import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -45,13 +47,14 @@ public final class PullToRefreshListActivity extends ListActivity {
 	private LinkedList<String> mListItems;
 	private PullToRefreshListView mPullRefreshListView;
 	private ArrayAdapter<String> mAdapter;
+    private Random mRandom;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ptr_list);
-
+        mRandom = new Random(1);
 		mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
 
 		// Set a listener to be invoked when the list should be refreshed.
@@ -63,18 +66,19 @@ public final class PullToRefreshListActivity extends ListActivity {
 								| DateUtils.FORMAT_ABBREV_ALL));
 
 				// Do work to refresh the list here.
-				new GetDataTask().execute();
+				new GetDataTask(false).execute();
 			}
 		});
 
-		// Add an end-of-list listener
-		mPullRefreshListView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
 
-			@Override
-			public void onLastItemVisible() {
-				Toast.makeText(PullToRefreshListActivity.this, "End of List!", Toast.LENGTH_SHORT).show();
-			}
-		});
+        mPullRefreshListView.setOnAutoLoadMoreListener(new PullToRefreshBase.OnAutoLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                mPullRefreshListView.setLoadMore();
+                new GetDataTask(true).execute();
+                Toast.makeText(PullToRefreshListActivity.this, "On Last One", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 		ListView actualListView = mPullRefreshListView.getRefreshableView();
 
@@ -98,12 +102,17 @@ public final class PullToRefreshListActivity extends ListActivity {
 	}
 
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+        private boolean loadmore = false;
 
-		@Override
+        private GetDataTask(boolean loadmore) {
+            this.loadmore = loadmore;
+        }
+
+        @Override
 		protected String[] doInBackground(Void... params) {
 			// Simulates a background job.
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(4000);
 			} catch (InterruptedException e) {
 			}
 			return mStrings;
@@ -111,12 +120,36 @@ public final class PullToRefreshListActivity extends ListActivity {
 
 		@Override
 		protected void onPostExecute(String[] result) {
-			mListItems.addFirst("Added after refresh...");
-			mAdapter.notifyDataSetChanged();
 
-			// Call onRefreshComplete when the list has been refreshed.
-			mPullRefreshListView.onRefreshComplete();
+            int fp = mPullRefreshListView.getRefreshableView().getFirstVisiblePosition();
+            int p = 0;
+            if (!loadmore) {
+                int r = mRandom.nextInt(10);
+                for (int i=0; i < r; i ++) {
+                    mListItems.addFirst("Added after refresh... " + mRandom.nextInt());
+                }
 
+                p = fp + r - 1;
+
+                // Call onRefreshComplete when the list has been refreshed.
+                mPullRefreshListView.onRefreshComplete();
+            } else {
+                int r = mRandom.nextInt(10);
+                r= 0;
+                for (int i=0; i < r; i ++) {
+                    mListItems.addLast("added after load more " + mRandom.nextInt());
+                }
+                Log.d("PullToRefresh", "none");
+//                if (r == 0) {
+                    mPullRefreshListView.onNoLoadMore("没有更多");
+//                }
+//                mListItems.addLast("added after load more " + mRandom.nextInt());
+//                mPullRefreshListView.onLoadMoreComplete();
+                p = fp + 1;
+            }
+
+            mAdapter.notifyDataSetChanged();
+            mPullRefreshListView.getRefreshableView().setSelection(p);
 			super.onPostExecute(result);
 		}
 	}
@@ -151,7 +184,7 @@ public final class PullToRefreshListActivity extends ListActivity {
 
 		switch (item.getItemId()) {
 			case MENU_MANUAL_REFRESH:
-				new GetDataTask().execute();
+				new GetDataTask(false).execute();
 				mPullRefreshListView.setRefreshing(false);
 				break;
 			case MENU_DISABLE_SCROLL:

@@ -73,7 +73,13 @@ public class RotateLoadingLayout extends LoadingLayout {
 		resetImageRotation();
 	}
 
-	private void resetImageRotation() {
+    @Override
+    protected void resetNone() {
+        mHeaderImage.clearAnimation();
+        mHeaderImage.setVisibility(INVISIBLE);
+    }
+
+    private void resetImageRotation() {
 		if (null != mHeaderImageMatrix) {
 			mHeaderImageMatrix.reset();
 			mHeaderImage.setImageMatrix(mHeaderImageMatrix);
