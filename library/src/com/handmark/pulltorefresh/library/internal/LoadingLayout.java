@@ -26,6 +26,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -301,6 +302,7 @@ public abstract class LoadingLayout extends LinearLayout {
         mRefreshingLabel = title;
         mHeaderText.setText(title);
         mHeaderText.setGravity(Gravity.CENTER);
+        mHeaderText.setPadding(0, 15, 0 ,15);
         mSubHeaderText.setVisibility(View.GONE);
         mHeaderImage.setVisibility(View.GONE);
         mHeaderProgress.setVisibility(View.GONE);
