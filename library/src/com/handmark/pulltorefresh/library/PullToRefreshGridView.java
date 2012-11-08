@@ -53,7 +53,6 @@ public class PullToRefreshGridView extends PullToRefreshAdapterViewBase<GridView
 		} else {
 			gv = new InternalGridView(context, attrs);
 		}
-
 		// Use Generated ID (from res/values/ids.xml)
 		gv.setId(R.id.gridview);
 		return gv;
@@ -101,4 +100,26 @@ public class PullToRefreshGridView extends PullToRefreshAdapterViewBase<GridView
 			return returnValue;
 		}
 	}
+
+    @Override
+    void onLoadMore(final boolean doScroll) {
+        setHeaderScroll(getFooterHeight());
+        getFooterLayout().onPullY(getFooterHeight());
+
+        super.onLoadMore(false);
+
+    }
+
+    @Override
+    void onResetFooter() {
+
+
+        super.onResetFooter();
+    }
+
+    @Override
+    void onResetFooter(CharSequence title) {
+
+        super.onResetFooter();
+    }
 }

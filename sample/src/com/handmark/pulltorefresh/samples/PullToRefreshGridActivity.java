@@ -82,7 +82,16 @@ public final class PullToRefreshGridActivity extends Activity {
 
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 
-		@Override
+        private boolean isloadmore = false;
+
+        private GetDataTask() {
+        }
+
+        private GetDataTask(boolean isloadmore) {
+            this.isloadmore = isloadmore;
+        }
+
+        @Override
 		protected String[] doInBackground(Void... params) {
 			// Simulates a background job.
 			try {
@@ -94,12 +103,20 @@ public final class PullToRefreshGridActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String[] result) {
-			mListItems.addFirst("Added after refresh...");
-			mListItems.addAll(Arrays.asList(result));
+            mListItems.addAll(Arrays.asList(result));
+            if (isloadmore) {
+                mListItems.addLast("Added after loadmore");
+                mPullRefreshGridView.onLoadMoreComplete();
+            } else {
+                mListItems.addFirst("Added after refresh...");
+                mPullRefreshGridView.onRefreshComplete();
+            }
+
+
 			mAdapter.notifyDataSetChanged();
 
 			// Call onRefreshComplete when the list has been refreshed.
-			mPullRefreshGridView.onRefreshComplete();
+
 
 			super.onPostExecute(result);
 		}

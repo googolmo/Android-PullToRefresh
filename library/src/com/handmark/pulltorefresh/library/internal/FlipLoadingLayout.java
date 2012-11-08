@@ -100,7 +100,7 @@ public class FlipLoadingLayout extends LoadingLayout {
     protected void resetNone() {
         mHeaderImage.clearAnimation();
         mHeaderProgress.setVisibility(View.GONE);
-        mHeaderImage.setVisibility(View.INVISIBLE);
+        mHeaderImage.setVisibility(View.GONE);
 
     }
 

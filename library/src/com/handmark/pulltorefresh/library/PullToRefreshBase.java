@@ -50,7 +50,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
     static final String LOG_TAG = "PullToRefresh";
 
-    static final float FRICTION = 2.9f;
+    static final float FRICTION = 2.6f;
 
     public static final int SMOOTH_SCROLL_DURATION_MS = 250;
     public static final int SMOOTH_SCROLL_LONG_DURATION_MS = 325;
@@ -65,6 +65,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     static final String STATE_DISABLE_SCROLLING_REFRESHING = "ptr_disable_scrolling";
     static final String STATE_SHOW_REFRESHING_VIEW = "ptr_show_refreshing_view";
     static final String STATE_SUPER = "ptr_super";
+    static final String STATE_DISABLE_LOADMORE = "ptr_d_loadmore";
 
     // ===========================================================
     // Fields
@@ -759,6 +760,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
             mDisableScrollingWhileRefreshing = bundle.getBoolean(STATE_DISABLE_SCROLLING_REFRESHING, false);
             mShowViewWhileRefreshing = bundle.getBoolean(STATE_SHOW_REFRESHING_VIEW, true);
+            mDisableScrollLoadMore = bundle.getBoolean(STATE_DISABLE_LOADMORE, false);
 
             // Let super Restore Itself
             super.onRestoreInstanceState(bundle.getParcelable(STATE_SUPER));
@@ -790,6 +792,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         bundle.putBoolean(STATE_DISABLE_SCROLLING_REFRESHING, mDisableScrollingWhileRefreshing);
         bundle.putBoolean(STATE_SHOW_REFRESHING_VIEW, mShowViewWhileRefreshing);
         bundle.putParcelable(STATE_SUPER, super.onSaveInstanceState());
+        bundle.putBoolean(STATE_DISABLE_LOADMORE, mDisableScrollLoadMore);
 
         return bundle;
     }

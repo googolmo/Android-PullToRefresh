@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -48,6 +49,8 @@ public abstract class LoadingLayout extends LinearLayout {
 	private final TextView mHeaderText;
 	private final TextView mSubHeaderText;
 
+    private final View mRoateView;
+
 	private CharSequence mPullLabel;
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
@@ -66,6 +69,7 @@ public abstract class LoadingLayout extends LinearLayout {
 		mHeaderProgress = (ProgressBar) findViewById(R.id.pull_to_refresh_progress);
 		mSubHeaderText = (TextView) findViewById(R.id.pull_to_refresh_sub_text);
 		mHeaderImage = (ImageView) findViewById(R.id.pull_to_refresh_image);
+        mRoateView = (View) findViewById(R.id.v_rotate);
 
 		switch (mode) {
 			case PULL_UP_TO_REFRESH:
@@ -296,9 +300,11 @@ public abstract class LoadingLayout extends LinearLayout {
     public void resetNone(CharSequence title) {
         mRefreshingLabel = title;
         mHeaderText.setText(title);
+        mHeaderText.setGravity(Gravity.CENTER);
         mSubHeaderText.setVisibility(View.GONE);
         mHeaderImage.setVisibility(View.GONE);
         mHeaderProgress.setVisibility(View.GONE);
+        mRoateView.setVisibility(View.GONE);
         resetNone();
     }
 
