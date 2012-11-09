@@ -551,7 +551,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         if (mMode.canPullDown()) {
             mHeaderLayout.refreshing();
         }
-        if (mMode.canPullUp()) {
+        if (mMode.canPullUp() && mState != State.MANUAL_REFRESHING) {
             mFooterLayout.refreshing();
         }
 
