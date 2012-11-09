@@ -112,20 +112,19 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 			 * the last item is visible. lastVisibleItemIndex is a zero-based
 			 * index, so we add one to it to check against totalItemCount.
 			 */
-			if (visibleItemCount > 0 && (lastVisibleItemIndex) == totalItemCount) {
+			if (visibleItemCount > 0 && (lastVisibleItemIndex) == totalItemCount && firstVisibleItem != 0) {
 
 
 
 				if (lastVisibleItemIndex != mSavedLastVisibleIndex) {
-
+                    mSavedLastVisibleIndex = lastVisibleItemIndex;
                     mCanScrollLoadMore = false;
-                    if (null != mOnLastItemVisibleListener && firstVisibleItem != 0) {
-                        mSavedLastVisibleIndex = lastVisibleItemIndex;
+                    if (null != mOnLastItemVisibleListener) {
+
                         mOnLastItemVisibleListener.onLastItemVisible();
                     }
 
-                    if (null != mOnAutoLoadMoreListener && mDisableScrollLoadMore == false && firstVisibleItem != 0) {
-                        mSavedLastVisibleIndex = lastVisibleItemIndex;
+                    if (null != mOnAutoLoadMoreListener && mDisableScrollLoadMore == false) {
                         mOnAutoLoadMoreListener.onLoadMore();
                     }
 
