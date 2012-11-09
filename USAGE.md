@@ -1,34 +1,35 @@
 # 介绍
 * 在项目pom.xml文件中引用
 	> `<dependency>`
-	>
+	
 	> `<groupId>com.d.pulltorefresh</groupId>`
-	>
+	
 	> `<artifactId>pulltorefresh</artifactId>`
-	>
+	
 	> `<version>1.4.2</version>`
-	>
+	
 	> `<type>apklib</type>`
-	>
+	
 	> `</dependency>`
-	>
+	
 	
 * 在layout文件中使用pulltorefreshlistview
 	>`<com.handmark.pulltorefresh.library.PullToRefreshListView`
-	>
+	
 	> ```xmlns:ptr="http://schemas.android.com/apk/res-auto"```
-	>
+	
 	>```android:id="@+id/pull_refresh_list"```
-	>
+	
 	>```android:layout_width="fill_parent"```
-    >
+	
     >```android:layout_height="fill_parent"```
-    >
+    
     >```android:cacheColorHint="#00000000"```
-    >
+    
     >```android:divider="#19000000"```
-    >
+    
     >```ptr:ptrAnimationStyle="flip" />```
+    
 * 使用pulltorefreshlistview的时候如果使用xml来配置一定要引入命名空间```xmlns:ptr="http://schemas.android.com/apk/res-auto"```
 
 # 命名空间介绍
