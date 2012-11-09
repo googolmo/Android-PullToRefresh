@@ -142,9 +142,11 @@ public final class PullToRefreshListActivity extends ListActivity {
                 Log.d("PullToRefresh", "none");
                 if (r == 0) {
                     mPullRefreshListView.onNoLoadMore("没有更多");
+                } else {
+                    mPullRefreshListView.onLoadMoreComplete();
                 }
 //                mListItems.addLast("added after load more " + mRandom.nextInt());
-//                mPullRefreshListView.onLoadMoreComplete();
+
                 p = fp + 1;
             }
 
