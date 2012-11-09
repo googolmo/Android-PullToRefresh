@@ -33,6 +33,7 @@
     	>```ptr:ptrAnimationStyle="flip" />```
     
 * 使用pulltorefreshlistview的时候如果使用xml来配置一定要引入命名空间```xmlns:ptr="http://schemas.android.com/apk/res-auto"```
+* maven中依赖的 `<groupId>com.google.android</groupId>` 版本不能低于4.1.1.4
 
 # 命名空间介绍
 * 以ptr开头
