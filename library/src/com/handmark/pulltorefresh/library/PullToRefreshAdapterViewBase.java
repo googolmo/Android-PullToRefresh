@@ -124,7 +124,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
                         mOnLastItemVisibleListener.onLastItemVisible();
                     }
 
-                    if (null != mOnAutoLoadMoreListener && mDisableScrollLoadMore == false) {
+                    if (null != mOnAutoLoadMoreListener && mDisableScrollLoadMore == false && getMode().canLoadMore()) {
                         mOnAutoLoadMoreListener.onLoadMore();
                     }
 
