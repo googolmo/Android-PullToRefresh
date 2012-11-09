@@ -86,17 +86,27 @@
 	* 完成后调用 onRefreshComplete() 结束刷新界面展示
 * SoundPullEventListener 拉动事件声音监听器,重写相应方法可以在拉动的不同状态发出传入的声音文件的声音 将对象 setOnPullEventListener(new SoundPullEventListener)
 	* 举个栗子
+	
 	 > SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(this);
+	 
 	 > soundListener.addSoundEvent(State.PULL_TO_REFRESH, R.raw.pull_event);
+	 
 	 > soundListener.addSoundEvent(State.RESET, R.raw.reset_sound);
+	 
 	 > soundListener.addSoundEvent(State.REFRESHING, R.raw.refreshing_sound);
+	 
 	 > mPullRefreshListView.setOnPullEventListener(soundListener);
 
 * setDisableScrollingWhileRefreshing 设置是否可以在刷新进行的时候进行Listview的滚动
 * emptyView使用,可以设置下拉刷新的view的emptyview
 	* 举个栗子:
+	
 	> TextView tv = new TextView(this);
+	
 	> tv.setGravity(Gravity.CENTER);
+	
 	> tv.setText("Empty View, Pull Down/Up to Add Items");
+	
 	> mPullRefreshGridView.setEmptyView(tv);
+	
 
