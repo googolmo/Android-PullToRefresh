@@ -13,6 +13,7 @@ gen
 *.ipr
 *.iws
 out
+gen-external-apklibs
 
 #Maven
 target
