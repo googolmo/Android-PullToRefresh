@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -82,10 +83,17 @@ public final class PullToRefreshListActivity extends ListActivity {
 
 		ListView actualListView = mPullRefreshListView.getRefreshableView();
 
+        TextView  tv = new TextView(this);
+        tv.setText("hello");
+
+        actualListView.addHeaderView(tv);
+
 		mListItems = new LinkedList<String>();
 		mListItems.addAll(Arrays.asList(mStrings));
 
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListItems);
+
+
 
 		/**
 		 * Add Sound Event Listener
