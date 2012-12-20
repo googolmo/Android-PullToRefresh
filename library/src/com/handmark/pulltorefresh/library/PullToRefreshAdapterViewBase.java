@@ -86,8 +86,8 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 
 		if (DEBUG) {
 			Log.d(LOG_TAG, "First Visible: " + firstVisibleItem + ". Visible Count: " + visibleItemCount
-					+ ". Total Items: " + totalItemCount + ".Last Item: " + mSavedLastVisibleIndex
-                    + ". CanScrollTrigger: " + mCanScrollLoadMore);
+                    + ". Total Items: " + totalItemCount + ".Last Item: " + mSavedLastVisibleIndex
+                    + ". CanScrollTrigger: " + mCanScrollLoadMore + ". CanLoadMore:" + getMode().canLoadMore());
 		}
 
         // If we're showing the indicator, check positions...
@@ -101,11 +101,15 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
         }
 
 		// If we have a OnItemVisibleListener, do check...
-		if (mCanScrollLoadMore == true
+		if (mCanScrollLoadMore
                 &&(null != mOnLastItemVisibleListener || null != mOnAutoLoadMoreListener)) {
 
 			// Detect whether the last visible item has changed
 			final int lastVisibleItemIndex = firstVisibleItem + visibleItemCount;
+
+            if (DEBUG) {
+                Log.d(LOG_TAG, "lastVisibleItemIndex=" + lastVisibleItemIndex + ", mSavedLastVisibleIndex=" + mSavedLastVisibleIndex);
+            }
 
 			/**
 			 * Check that the last item has changed, we have any items, and that
@@ -124,7 +128,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
                         mOnLastItemVisibleListener.onLastItemVisible();
                     }
 
-                    if (null != mOnAutoLoadMoreListener && mDisableScrollLoadMore == false && getMode().canLoadMore()) {
+                    if (null != mOnAutoLoadMoreListener && !mDisableScrollLoadMore && getMode().canLoadMore()) {
                         mOnAutoLoadMoreListener.onLoadMore();
                     }
 
@@ -272,6 +276,8 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 		}
 	}
 
+
+
 	@Override
 	void onReleaseToRefresh() {
 		super.onReleaseToRefresh();
@@ -291,7 +297,6 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	@Override
 	void onReset() {
 		super.onReset();
-
 		if (getShowIndicatorInternal()) {
 			updateIndicatorViewsVisibility();
 		}
@@ -474,4 +479,10 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 			}
 		}
 	}
+
+    @Override
+    void onResetFooter() {
+        mSavedLastVisibleIndex = -1;
+        super.onResetFooter();
+    }
 }

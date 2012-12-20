@@ -50,7 +50,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
     static final String LOG_TAG = "PullToRefresh";
 
-    static final float FRICTION = 2.6f;
+    static final float FRICTION = 2.8f;
+
+    /**
+     * 限制拉动高度的倍数
+     */
+    static final int PULL_MAX_TIMES = 2;
 
     public static final int SMOOTH_SCROLL_DURATION_MS = 250;
     public static final int SMOOTH_SCROLL_LONG_DURATION_MS = 325;
@@ -1033,12 +1038,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         if (mMode.canPullDown()) {
             measureView(mHeaderLayout);
             mHeaderHeight = mHeaderLayout.getMeasuredHeight();
-            mPullDownMax = (int) (mHeaderHeight * 1.5);
+            mPullDownMax = (int) (mHeaderHeight * PULL_MAX_TIMES);
         }
         if (mMode.canPullUp() || mMode.canLoadMore()) {
             measureView(mFooterLayout);
             mFooterHeight = mFooterLayout.getMeasuredHeight();
-            mPullUpMax = (int) (mFooterHeight * 1.5);
+            mPullUpMax = (int) (mFooterHeight * PULL_MAX_TIMES);
         }
 
         // Hide Loading Views
